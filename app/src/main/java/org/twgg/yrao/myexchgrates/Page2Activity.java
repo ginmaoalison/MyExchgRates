@@ -21,37 +21,57 @@ import java.net.URL;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Page2Activity extends AppCompatActivity {
     private ListView list2;
     private LinkedList<HashMap<String,Object>> data;
-    private String[] from = {"currency","img"};
-    private int[] to = {R.id.sel_currency,R.id.sel_img};
-    private int[] imgs = {R.drawable.twd, R.drawable.jpy, R.drawable.usd, R.drawable.cny};
-    private String[] country = {"TWD", "JPY", "USD", "CNY"};
+    private String[] from = {"currency","img","cname"};
+    private int[] to = {R.id.sel_currency,R.id.sel_img,R.id.sel_cname};
+    private int[] imgs;
+    private String[] currency;
+    private String[] cname ;
     private SimpleAdapter adapter;
+    private String combo;
+    private int len=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page2);
 
         list2 = (ListView) findViewById(R.id.listView2);
+        combo = " [{Code: TWD, Name: 台幣}, {Code: JPY, Name: 日圓}, {Code: USD, Name: 美元}, {Code: CNY, Name: 人民幣}"+
+                 ", {Code: AUD, Name: 澳大利亞元}, {Code: GBP, Name: 英鎊}, {Code: EUR, Name: 歐元}, {Code: HKD, Name: 港幣}]";
 
         initListView2();
 
     }
 
     private void initListView2() {
-        data = new LinkedList<>();
-        HashMap<String,Object> data0 = new HashMap<>();
-        data0.put(from[0], country[0]);
-        data0.put(from[1], imgs[0]);
-        data.add(data0);
+        try {
+            JSONArray root = new JSONArray(combo);
+            len = root.length();
+            currency = new String[len];
+            cname = new String[len];
+            imgs = new int[len];
+            for (int i=0;i<len;i++){
+                JSONObject item = root.getJSONObject(i);
+                currency[i] = item.getString("Code");
+                cname[i] = item.getString("Name");//轉換抓取drawable對應名稱的id
+                imgs[i] = getResources().getIdentifier(currency[i].toLowerCase(), "drawable", getPackageName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        HashMap<String,Object> data1 = new HashMap<>();
-        data1.put(from[0], country[1]);
-        data1.put(from[1], imgs[1]);
-        data.add(data1);
+        data = new LinkedList<>();
+        for (int x=0; x<len; x++){
+            HashMap<String,Object> map = new HashMap<>();
+            map.put(from[0], currency[x]);
+            map.put(from[1], imgs[x]);
+            map.put(from[2], cname[x]);
+            data.add(map);
+        }
 
         adapter = new SimpleAdapter(this, data, R.layout.layout_item2, from, to);
         list2.setAdapter(adapter);
@@ -77,4 +97,5 @@ public class Page2Activity extends AppCompatActivity {
         setResult(RESULT_OK,it);
         finish();
     }
+
 }

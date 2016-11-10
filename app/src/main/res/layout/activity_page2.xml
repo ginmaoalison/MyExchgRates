@@ -4,9 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="貨幣"
+        android:textSize="14sp"
+        android:background="#DCDCDC"/>
     <ListView
         android:id="@+id/listView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#F0F8FF"/>
 
 </LinearLayout>

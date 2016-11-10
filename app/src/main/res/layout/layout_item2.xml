@@ -7,13 +7,21 @@
     <ImageView
         android:id="@+id/sel_img"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="#E6E6FA"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:id="@+id/sel_cname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#666666"
+        android:layout_weight="3"/>
     <TextView
         android:id="@+id/sel_currency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:textColor="#666666"
-        android:layout_weight="3"
-        />
+        android:layout_weight="3"/>
 </LinearLayout>
