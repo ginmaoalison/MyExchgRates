@@ -16,11 +16,26 @@
         android:textColor="#666666"
         android:layout_weight="3"
         />
-    <EditText
-        android:id="@+id/inputDollar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:textColor="#666666"/>
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/inputDollar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:textSize="22sp"
+            android:textColor="#666666"/>
+        <TextView
+            android:id="@+id/dollarName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:textSize="12sp"
+            android:textColor="#DCDCDC"/>
+    </LinearLayout>
+
 </LinearLayout>

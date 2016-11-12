@@ -1,9 +1,12 @@
 package org.twgg.yrao.myexchgrates;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -11,6 +14,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,15 +32,17 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView list;
     private LinkedList<HashMap<String,Object>> data;
-    private String[] from = {"currency","img","default"};
-    private int[] to = {R.id.item_currency,R.id.img,R.id.inputDollar};
+    private String[] from = {"currency","img","default","dname"};
+    private int[] to = {R.id.item_currency,R.id.img,R.id.inputDollar,R.id.dollarName};
     private int[] imgs = {R.drawable.twd, R.drawable.jpy, R.drawable.usd, R.drawable.cny};
     private String[] currency = {"TWD", "JPY", "USD", "CNY"};
+    private String[] dname = {"台幣","日圓","美元","人民幣"};
     private Double[] money = new Double[4];
     private SimpleAdapter adapter;
     private EditText input;
-    private DecimalFormat df=new DecimalFormat("#.##");
+    private DecimalFormat df=new DecimalFormat("#,###,###,###,###,##0.00");
     private int pos=0;
+    private Double dollars=100D;
 
     //計算機button
     private GridView mGridButtons = null;
@@ -54,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
         list = (ListView) findViewById(R.id.listView);
 
-        mGridButtons = (GridView) findViewById(R.id.grid_buttons);
+        /*mGridButtons = (GridView) findViewById(R.id.grid_buttons);
         mAdapter = new CalculatorAdapter(this, mTextBtns);
         mGridButtons.setAdapter(mAdapter);
         // 新建一個自訂AdapterView.OnItemClickListener的物件，用於設置GridView每個選項按鈕點擊事件
         OnButtonItemClickListener listener = new OnButtonItemClickListener();
-        mGridButtons.setOnItemClickListener(listener);
+        mGridButtons.setOnItemClickListener(listener);*/
 
 
         initRates();    //預設貨幣匯率
@@ -77,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             map.put(from[0], currency[x]);
             map.put(from[1], imgs[x]);
             map.put(from[2], df.format(money[x]));
+            map.put(from[3], dname[x]);
             data.add(map);
         }
 
@@ -117,7 +124,10 @@ public class MainActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("test", "p1="+position);
+                TextView inputDollar = (TextView)view.findViewById(R.id.inputDollar);
+                Log.v("test", "p1="+position+"; "+inputDollar.getText());
+                pos = position;  //基準貨幣位置
+                setAlertDialogEvent();
             }
         });
         // 長按
@@ -157,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             JSONObject root = new JSONObject(json);
             JSONObject st = root.getJSONObject("USD"+currency[pos]);
-            Double st_dollar = 100 / Double.valueOf(st.getString("Exrate"));
+            Double st_dollar = dollars / Double.valueOf(st.getString("Exrate"));
 
-            money[pos] = 100D;
+            money[pos] = dollars;
             for (int i = 0; i<4; i++){
                 if (i != pos) {
                     JSONObject ex = root.getJSONObject("USD" + currency[i]);
@@ -190,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             //取得startActivityForResult回傳過來的值
             String re_currency = intent.getStringExtra("currency");
+            String re_dname = intent.getStringExtra("dname");
 
             //轉換抓取drawable對應名稱的id
             int id = getResources().getIdentifier(re_currency.toLowerCase(), "drawable", getPackageName());
@@ -197,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
             HashMap<String,Object> data_chg = new HashMap<>();
             currency[p] = re_currency;
             imgs[p] = id;
+            dname[p] = re_dname;
             //data.remove(p);
             initRates();
             try {
@@ -218,13 +230,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //
-    private class OnButtonItemClickListener implements AdapterView.OnItemClickListener{
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String text = (String) parent.getAdapter().getItem(position);
-            Log.v("test", position+": "+text);
+    private void setAlertDialogEvent(){
+        final View item = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_alert, null);
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("輸入數字")
+                .setView(item)
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == -1) {
+                            EditText editText = (EditText) item.findViewById(R.id.editText);
+                            if (editText.getText().toString().equals(null) || editText.getText().toString().equals("")) {
+                                dollars = 100D;
+                            } else {
+                                dollars = Double.valueOf(editText.getText().toString());
+                            }
+                            Log.v("test", "dollars=" + dollars);
 
-        }
+                            initRates();
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            setData();
+                        }
+                    }
+                }).show();
     }
 }

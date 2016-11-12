@@ -83,6 +83,7 @@ public class Page2Activity extends AppCompatActivity {
                 Log.v("test", "list2: p1="+position);
                 Intent it = new Intent(Page2Activity.this, MainActivity.class);
                 it.putExtra("currency",(String) data.get(position).get(from[0]));
+                it.putExtra("dname",(String) data.get(position).get(from[2]));
                 //startActivity(it);
                 setResult(RESULT_OK,it);
                 finish();
@@ -90,12 +91,5 @@ public class Page2Activity extends AppCompatActivity {
         });
     }
 
-    public void backMain(int p){
-        Intent it = new Intent(this, MainActivity.class);
-        it.putExtra("currency",(String) data.get(p).get(from[0]));
-        //startActivity(it);
-        setResult(RESULT_OK,it);
-        finish();
-    }
 
 }
