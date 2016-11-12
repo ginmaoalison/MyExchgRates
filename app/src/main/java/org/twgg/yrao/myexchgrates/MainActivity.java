@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
             map.put(from[2], df.format(money[x]));
             data.add(map);
         }
+
+        adapter = new SimpleAdapter(this, data, R.layout.layout_item, from, to);
+        list.setAdapter(adapter);
     }
 
     public void initListView() {
@@ -109,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
         data3.put(from[2], df.format(money[3]));
         data.add(data3);*/
         setData();
-        adapter = new SimpleAdapter(this, data, R.layout.layout_item, from, to);
-        list.setAdapter(adapter);
 
         // 關於ListView裡點選其中的項目
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -211,8 +212,7 @@ public class MainActivity extends AppCompatActivity {
             data.add(p, data_chg);*/
             setData();
 
-            adapter = new SimpleAdapter(this, data, R.layout.layout_item, from, to);
-            list.setAdapter(adapter);
+
         } else if (resultCode == RESULT_CANCELED) {
             //當還沒完成動作時，使用者倒退回上一步會判定為cancel
         }
