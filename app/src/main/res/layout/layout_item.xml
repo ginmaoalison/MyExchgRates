@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:gravity="right"
             android:textSize="22sp"
-            android:textColor="#666666"/>
+            android:textColor="#cccccc"/>
         <TextView
             android:id="@+id/dollarName"
             android:layout_width="match_parent"

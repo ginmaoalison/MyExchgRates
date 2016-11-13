@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private int pos=0;
     private Double dollars=100D;
 
+    private WebView webview;
+
     //計算機button
     private GridView mGridButtons = null;
     private BaseAdapter mAdapter = null;
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         list = (ListView) findViewById(R.id.listView);
+        webview = (WebView) findViewById(R.id.webview);
 
         /*mGridButtons = (GridView) findViewById(R.id.grid_buttons);
         mAdapter = new CalculatorAdapter(this, mTextBtns);
@@ -89,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new SimpleAdapter(this, data, R.layout.layout_item, from, to);
         list.setAdapter(adapter);
+        getChart();
     }
 
     public void initListView() {
@@ -258,4 +265,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).show();
     }
+
+    private void getChart(){
+        webview.setWebViewClient(new WebViewClient());
+        webview.loadUrl("https://chart.finance.yahoo.com/z?s=USD"+currency[pos]+"%3dX&t=1m&q=l&l=on&z=l&a=v&p=s&lang=zh-Hant-TW&region=TW");
+        // 調整到適合WebView大小
+        webview.getSettings().setUseWideViewPort(true);
+        //webview.getSettings().setLoadWithOverviewMode(true);
+        // 設置支持縮放
+        webview.getSettings().setSupportZoom(true);
+        webview.getSettings().setBuiltInZoomControls(true);
+        // 設置縮放比例
+        webview.setInitialScale(95);
+    }
+
 }

@@ -41,7 +41,8 @@ public class Page2Activity extends AppCompatActivity {
 
         list2 = (ListView) findViewById(R.id.listView2);
         combo = " [{Code: TWD, Name: 台幣}, {Code: JPY, Name: 日圓}, {Code: USD, Name: 美元}, {Code: CNY, Name: 人民幣}"+
-                 ", {Code: AUD, Name: 澳大利亞元}, {Code: GBP, Name: 英鎊}, {Code: EUR, Name: 歐元}, {Code: HKD, Name: 港幣}]";
+                 ", {Code: AUD, Name: 澳大利亞元}, {Code: GBP, Name: 英鎊}, {Code: EUR, Name: 歐元}, {Code: HKD, Name: 港幣}"+
+                 ", {Code: MOP, Name: 澳門幣}, {Code: KRW, Name: 韓圜}, {Code: THB, Name: 泰銖}, {Code: CAD, Name: 加拿大元}]";
 
         initListView2();
 
