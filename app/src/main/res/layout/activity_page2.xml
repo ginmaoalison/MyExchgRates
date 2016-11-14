@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,5 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F0F8FF"/>
-
+        -->
+    <ExpandableListView
+        android:id="@+id/elst"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
